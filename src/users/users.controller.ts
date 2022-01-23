@@ -22,25 +22,28 @@ export class UsersController {
         )
     return result;
   }
-/*
+
   @Get('users')
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    const users = await this.usersService.findAll();
+    return users;
   }
 
   @Get('user/:id')
-  findOne(@Param('id') id: number) {
-      return this.usersService.findOne(+id);
+  getUser(@Param('id') userid: string) {
+      return this.usersService.getOneUser(userid);
   }
 
 
   @Put('updateuser')
-  update(@Body('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(@Param('id') userId:string, @Body('firstname') firstname: string, @Body('lastname') lastname: string, @Body('email') email:string, @Body('password') password:string) {
+    await this.usersService.update(userId, firstname, lastname, email, password);
+    return null;
   }
 
-  @Delete('deleteuser')
-  remove(@Body('id') id: number) {
-    return this.usersService.remove(+id);
-  }*/
+  @Delete(':id')
+  async remove(@Param('id') userId: string) {
+    await this.usersService.remove(userId);
+    return null;
+  }
 }

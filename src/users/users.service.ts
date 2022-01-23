@@ -28,21 +28,44 @@ export class UsersService {
     console.log(result);
     return 'logseds';
   }
-/*
-  findAll() {
-    return this.usersRepository.find();
+
+  async findAll() {
+    const result = await this.userModel.find().exec();
+    return result.map(user =>({
+      id: user.id,
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+    }))
   }
 
-  async findOne(id: number) {
-    await this.usersRepository.findOne(id);
+  async getOneUser(userId: string) {
+    const result = await this.findUser(userId);
+    return result;
+  }
+  private async findUser(id: string): Promise<User> {
+    const user = await this.userModel.findById(id);
+    return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    await this.usersRepository.update(id, updateUserDto);
+  async update(userId: string, firstname:string, lastname:string, email:string, password:string) {
+    const updatedUser = await this.findUser(userId);
+    if (firstname){
+      updatedUser.firstname = firstname;
+    }
+    if (lastname){
+      updatedUser.lastname = lastname;
+    }
+    if (email){
+      updatedUser.email = email;
+    }
+    if (password){
+      updatedUser.password = password;
+    }
+    updatedUser.save();
   }
 
-  async remove(id: number) {
-    await this.usersRepository.delete(id);
-  }*/
-
+  async remove(userId: string) {
+    await this.userModel.deleteOne({id: userId});
+  }
 }
